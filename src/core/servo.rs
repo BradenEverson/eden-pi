@@ -16,6 +16,7 @@ impl Servo {
     pub fn new(pin: u8) -> Result<Self, Box<dyn Error>> {
         let mut out_pin = Gpio::new()?.get(pin)?.into_output();
         Servo::move_servo(&mut out_pin, PULSE_MIN_US, PULSE_MIN_US)?;
+        thread::sleep(Duration::from_millis(500));
 
         Ok(Servo { state: PULSE_MIN_US, out_pin })
     }
@@ -39,7 +40,7 @@ impl Servo {
                 Duration::from_millis(PERIOD_MS),
                 Duration::from_micros(pulse),
                 )?;
-            thread::sleep(Duration::from_millis(50));
+            thread::sleep(Duration::from_millis(20));
         }
         Ok(())
     }
