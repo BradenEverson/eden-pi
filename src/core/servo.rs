@@ -24,5 +24,5 @@ fn move_servo(servo: &mut OutputPin, to: u64) -> Result<(), Box<dyn Error>> {
 }
 
 pub fn move_to_deg(servo: &mut OutputPin, to_deg: u8) -> Result<(), Box<dyn Error>> {
-    move_servo(servo, deg_to_pulse(to_deg))
+    move_servo(servo, PULSE_MAX_US)
 }
