@@ -6,7 +6,7 @@ use rppal::gpio::OutputPin;
 const PERIOD_MS: u64 = 20;
 const PULSE_MIN_US: u64 = 1200;
 const PULSE_NEUTRAL_US: u64 = 1500;
-const PULSE_MAX_US: u64 = 1800;
+const PULSE_MAX_US: u64 = 2300;
 
 fn deg_to_pulse(deg: u8) -> u64 {
     ((10.0 / 3.0) * (deg as f32) + 1200.0) as u64
