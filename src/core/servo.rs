@@ -1,28 +1,47 @@
 use std::{error::Error, time::Duration, thread};
 
-use rppal::gpio::OutputPin;
-
+use rppal::gpio::{OutputPin, Gpio};
 
 const PERIOD_MS: u64 = 20;
 const PULSE_MIN_US: u64 = 1200;
 const PULSE_NEUTRAL_US: u64 = 1500;
-const PULSE_MAX_US: u64 = 2300;
+const PULSE_MAX_US: u64 = 2500;
 
-fn deg_to_pulse(deg: u8) -> u64 {
-    ((10.0 / 3.0) * (deg as f32) + 1200.0) as u64
+pub struct Servo {
+    pub state: u64,
+    out_pin: OutputPin
 }
 
-fn move_servo(servo: &mut OutputPin, to: u64) -> Result<(), Box<dyn Error>> {
-    for pulse in (PULSE_MIN_US..=to).step_by(10) {
-        servo.set_pwm(
-            Duration::from_millis(PERIOD_MS),
-            Duration::from_micros(pulse),
-            )?;
-        thread::sleep(Duration::from_millis(50));
+impl Servo {
+    pub fn new(pin: u8) -> Result<Self, Box<dyn Error>> {
+        let mut out_pin = Gpio::new()?.get(pin)?.into_output();
+        Servo::move_servo(&mut out_pin, PULSE_MIN_US, PULSE_MIN_US)?;
+
+        Ok(Servo { state: PULSE_MIN_US, out_pin })
     }
-    Ok(())
-}
+    
+    pub fn deg_to_pulse(deg: u8) -> u64 {
+        ((10.0 / 3.0) * (deg as f32)) as u64 + PULSE_MIN_US
+    }
 
-pub fn move_to_deg(servo: &mut OutputPin, to_deg: u8) -> Result<(), Box<dyn Error>> {
-    move_servo(servo, PULSE_MAX_US)
+    pub fn move_to(&mut self, to_deg: u8) -> Result<(), Box<dyn Error>> {
+        let pulse_to = Servo::deg_to_pulse(to_deg);
+
+        Servo::move_servo(&mut self.out_pin, self.state, Servo::deg_to_pulse(to_deg))?;
+        self.state = pulse_to;
+
+        Ok(())
+    }
+
+    fn move_servo(servo: &mut OutputPin, from: u64, to: u64) -> Result<(), Box<dyn Error>> {
+        for pulse in (from..=to).step_by(10) {
+            servo.set_pwm(
+                Duration::from_millis(PERIOD_MS),
+                Duration::from_micros(pulse),
+                )?;
+            thread::sleep(Duration::from_millis(50));
+        }
+        Ok(())
+    }
+
 }
