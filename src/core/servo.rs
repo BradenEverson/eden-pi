@@ -22,7 +22,7 @@ impl Servo {
     }
     
     pub fn deg_to_pulse(deg: u8) -> u64 {
-        (0.0403609 * (deg as f32).powi(2) + 1188.46) as u64
+        (0.0403609 * (deg as f32).powi(2)) as u64
     }
 
     pub fn move_to(&mut self, to_deg: u8) -> Result<(), Box<dyn Error>> {
