@@ -9,7 +9,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut pin = Gpio::new()?.get(SERVO)?.into_output();
 
     move_to_deg(&mut pin, 180)?;
-    move_to_deg(&mut pin, 90)?;
 
     Ok(())
 }
