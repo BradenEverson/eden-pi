@@ -1,4 +1,4 @@
-use std::error::Error;
+use std::{error::Error, thread, time::Duration};
 
 use eden::core::servo::Servo;
 use rppal::gpio::Gpio;
@@ -9,7 +9,15 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let mut servo: Servo = Servo::new(SERVO)?;
     
-    servo.move_to(180)?;
+    loop {
+        servo.move_to(180)?;
+        thread::sleep(Duration::from_millis(500));
+        servo.move_to(90)?;
+        thread::sleep(Duration::from_millis(500));
+        servo.move_to(0)?;
+        thread::sleep(Duration::from_millis(500));
+    }
+
 
     Ok(())
 }
