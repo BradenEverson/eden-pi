@@ -16,7 +16,7 @@ const PULSE_NEUTRAL_US: u64 = 1500;
 const PULSE_MAX_US: u64 = 1800;
 
 fn move_servo(servo: &mut OutputPin, to: u64) -> Result<(), Box<dyn Error>> {
-    for pulse in (0..=to).step_by(10) {
+    for pulse in (PULSE_MIN_US..=to).step_by(10) {
         servo.set_pwm(
             Duration::from_millis(PERIOD_MS),
             Duration::from_micros(pulse),
