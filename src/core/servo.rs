@@ -15,14 +15,14 @@ pub struct Servo {
 impl Servo {
     pub fn new(pin: u8) -> Result<Self, Box<dyn Error>> {
         let mut out_pin = Gpio::new()?.get(pin)?.into_output();
-        Servo::move_servo(&mut out_pin, PULSE_MIN_US, PULSE_MIN_US)?;
+        Servo::move_servo(&mut out_pin, PULSE_NEUTRAL_US, PULSE_MIN_US)?;
         thread::sleep(Duration::from_millis(500));
 
         Ok(Servo { state: PULSE_MIN_US, out_pin })
     }
     
     pub fn deg_to_pulse(deg: u8) -> u64 {
-        (0.037037 * (deg as f32).powi(2)) as u64 + PULSE_MIN_US
+        (0.0403609 * (deg as f32).powi(2) + 1188.46) as u64
     }
 
     pub fn move_to(&mut self, to_deg: u8) -> Result<(), Box<dyn Error>> {
