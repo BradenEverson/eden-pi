@@ -15,8 +15,8 @@ const PULSE_MIN_US: u64 = 1200;
 const PULSE_NEUTRAL_US: u64 = 1500;
 const PULSE_MAX_US: u64 = 1800;
 
-fn move_servo(servo: &mut OutputPin, from: u64, to: u64) -> Result<(), Box<dyn Error>> {
-    for pulse in (from..=to).step_by(10) {
+fn move_servo(servo: &mut OutputPin, to: u64) -> Result<(), Box<dyn Error>> {
+    for pulse in (0..=to).step_by(10) {
         servo.set_pwm(
             Duration::from_millis(PERIOD_MS),
             Duration::from_micros(pulse),
@@ -29,7 +29,7 @@ fn move_servo(servo: &mut OutputPin, from: u64, to: u64) -> Result<(), Box<dyn E
 fn main() -> Result<(), Box<dyn Error>> {
     let mut pin = Gpio::new()?.get(SERVO)?.into_output();
 
-    move_servo(&mut pin, PULSE_MIN_US, PULSE_NEUTRAL_US)?;
+    move_servo(&mut pin, PULSE_NEUTRAL_US)?;
     // Rotate the servo to its neutral (center) position in small steps.
 
     Ok(())
