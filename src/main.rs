@@ -1,18 +1,3 @@
-f// gpio_servo_softpwm.rs - Rotates a servo using software-based PWM.
-//
-// Calibrate your servo beforehand, and change the values listed below to fall
-// within your servo's safe limits to prevent potential damage. Don't power the
-// servo directly from the Pi's GPIO header. Current spikes during power-up and
-// stalls could otherwise damage your Pi, or cause your Pi to spontaneously
-// reboot, corrupting your microSD card. If you're powering the servo using a
-// separate power supply, remember to connect the grounds of the Pi and the
-// power supply together.
-//
-// Software-based PWM is inherently inaccurate on a multi-threaded OS due to
-// scheduling/preemption. If an accurate or faster PWM signal is required, use
-// the hardware PWM peripheral instead. Check out the pwm_servo.rs example to
-// learn how to control a servo using hardware PWM.
-
 use std::error::Error;
 use std::thread;
 use std::time::Duration;
