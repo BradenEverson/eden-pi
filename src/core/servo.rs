@@ -18,7 +18,7 @@ fn move_servo(servo: &mut OutputPin, to: u64) -> Result<(), Box<dyn Error>> {
             Duration::from_millis(PERIOD_MS),
             Duration::from_micros(pulse),
             )?;
-        thread::sleep(Duration::from_millis(20));
+        thread::sleep(Duration::from_millis(50));
     }
     Ok(())
 }
