@@ -2,10 +2,9 @@ use std::error::Error;
 use std::thread;
 use std::time::Duration;
 
-use rppal::gpio::Gpio;
+use rppal::gpio::{Gpio, OutputPin};
 
-// Gpio uses BCM pin numbering. BCM GPIO 23 is tied to physical pin 16.
-const GPIO_PWM: u8 = 23;
+const SERVO: u8 = 23;
 
 // Servo configuration. Change these values based on your servo's verified safe
 // minimum and maximum values.
@@ -16,19 +15,17 @@ const PULSE_MIN_US: u64 = 1200;
 const PULSE_NEUTRAL_US: u64 = 1500;
 const PULSE_MAX_US: u64 = 1800;
 
+fn move_servo(servo: &mut OutputPin, to: u64) -> Result<(), Box<dyn Error>> {
+    servo.set_pwm(
+        Duration::from_millis(PERIOD_MS),
+        Duration::from_micros(to))?;
+    Ok(())
+}
+
 fn main() -> Result<(), Box<dyn Error>> {
-    let mut pin = Gpio::new()?.get(GPIO_PWM)?.into_output();
-
-    thread::sleep(Duration::from_millis(500));
-
-    // Rotate the servo to its neutral (center) position in small steps.
-    for pulse in (PULSE_MIN_US..=PULSE_NEUTRAL_US).step_by(10) {
-        pin.set_pwm(
-            Duration::from_millis(PERIOD_MS),
-            Duration::from_micros(pulse),
-        )?;
-        thread::sleep(Duration::from_millis(20));
-    }
+    let mut pin = Gpio::new()?.get(SERVO)?.into_output();
+    
+    move_servo(&mut pin, PULSE_NEUTRAL_US)?;
 
     Ok(())
 }
