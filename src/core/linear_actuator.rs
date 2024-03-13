@@ -23,6 +23,20 @@ impl LinearActuator {
         self.out_state += dur_millis;
         Ok(())
     }
+
+    pub fn down(&mut self, dur_millis: u64) -> Result<(), Box<dyn Error>> {
+        self.fwd_pin.set_low();
+        self.bkwd_pin.set_high();
+        thread::sleep(Duration::from_millis(dur_millis));
+        self.fwd_pin.set_low();
+        self.bkwd_pin.set_low();
+        if dur_millis > self.out_state {
+            self.out_state = 0;
+        } else {
+            self.out_state -= dur_millis;
+        }
+        Ok(())
+    }
     pub fn go_back(&mut self) {
         self.bkwd_pin.set_high();
         self.fwd_pin.set_low();
