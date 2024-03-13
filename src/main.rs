@@ -10,7 +10,7 @@ const BKWD: u8 = 20;
 fn main() -> Result<(), Box<dyn Error>> {
     let mut lin: LinearActuator = LinearActuator::new(FWD, BKWD)?;
 
-    lin.up(1000)?;
+    lin.up(10000)?;
     lin.go_back();
 
 
