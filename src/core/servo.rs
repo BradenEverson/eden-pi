@@ -30,7 +30,6 @@ impl Servo {
 
         Servo::move_servo(&mut self.out_pin, self.state, Servo::deg_to_pulse(to_deg))?;
         self.state = pulse_to;
-        println!("{}", self.state);
 
         Ok(())
     }
