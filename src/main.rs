@@ -1,15 +1,17 @@
 use std::{error::Error, thread, time::Duration};
 
-use eden::core::servo::Servo;
+use eden::core::{servo::Servo, linear_actuator::LinearActuator};
 use rppal::gpio::Gpio;
 
 const SERVO: u8 = 23;
+const FWD: u8 = 21;
+const BKWD: u8 = 20;
 
 fn main() -> Result<(), Box<dyn Error>> {
+    let mut lin: LinearActuator = LinearActuator::new(FWD, BKWD)?;
 
-    let mut servo: Servo = Servo::new(SERVO)?;
-
-    servo.move_to(90)?;
+    lin.up(1000)?;
+    lin.go_back();
 
 
     Ok(())
